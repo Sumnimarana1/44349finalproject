@@ -8,16 +8,15 @@
 # I have not given my code to any other student and will not share this code with anyone under any circumstances.
 
 import networkx as nx
-from networkx_viewer import Viewer
+import matplotlib.pyplot as plt
 
-G = nx.MultiDiGraph()
-G.add_edge('Arg2','Arg1')
-G.add_edge('Arg3','Arg1',0)
-G.add_edge('Arg3','Arg1',1)
-G.add_edge('Arg4','Arg2')
-G.add_edge('Arg5','Arg2')
-G.add_edge('Arg6','Arg3')
-G.node['Arg2']['outline'] = 'blue'
-G.node['Arg1']['label_fill'] = 'red'
-app = Viewer(G)
-app.mainloop()
+
+
+G = nx.Graph()
+
+G.add_edge(1, 2)
+G.add_edge(2,3)
+pos = nx.spring_layout(G)
+
+nx.draw(G,pos)
+plt.show()
