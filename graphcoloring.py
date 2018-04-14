@@ -12,28 +12,55 @@ import matplotlib.pyplot as plt
 from operator import itemgetter
 
 
-
+# color graph using greedy algo (welsh-powell)
 def color(G):
     # sort nodes by degree, dec value (value,deg)
     sortednodes = sorted(G.degree, key=itemgetter(1), reverse=True)
     newnodelist = [a[0] for a in sortednodes]
 
-    G2 = nx.Graph();
-    G2.add_nodes_from(newnodelist, color='null')
+    # create new graph w/ sorted nodes
+    G2 = nx.Graph()
+    G2.add_nodes_from(newnodelist)
     G2.add_edges_from(G.edges)
 
-    print(newnodelist[0])
+    colorlist = ['r', 'g', 'b', 'm', 'yellow', 'orange', 'lime', 'cyan', 'purple', 'brown', 'pink', 'grey']
 
-    #print(G2.node[newnodelist[0]]['color'])
+    # set init color for node w/ highest degree
+    G2.nodes[newnodelist[0]].update({'color': colorlist[0]})
+
+    available = [False for value in range(len(colorlist))]
+
     for node in newnodelist[1:]:
+        for adj in G2.neighbors(node):
+            if ('color' in G2[adj]) == True:
+                print("Node" + node)
+                print("is false")
+
+            #print('color' in G2[adj])
+
+
+    '''i = 1
+    for node in newnodelist[1:]:
+        G2.nodes[node].update({'color' : colorlist[i]})
         print(G2.nodes[node])
+        i += 1'''
+
+    print(nx.get_node_attributes(G2, 'color'))
+    # print(G2.nodes['C'])
+
     return G2
 
 
 def draw(G):
     # Position nodes using Fruchterman-Reingold force-directed algorithm
     pos = nx.spring_layout(G)
-    colors = ['blue', 'red', 'yellow', 'green', 'orange', 'purple']
+
+    # fetch colors from graph and store in colors array
+    colors = []
+    atr = nx.get_node_attributes(G, 'color')
+    for nodes in G.nodes:
+        colors.append(atr[nodes])
+
     # draw graph and us matplotlib to visualize
     nx.draw(G, pos, with_labels=True, node_color= colors)
 
@@ -49,5 +76,5 @@ G.add_nodes_from(nodelist)
 G.add_edges_from(edgelist)
 
 coloredgraph = color(G)
-draw(coloredgraph)
-plt.show()
+#draw(coloredgraph)
+#plt.show()
