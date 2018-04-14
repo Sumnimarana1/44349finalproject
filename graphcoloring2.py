@@ -11,46 +11,29 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
 
-colorlist = ['r', 'g', 'b', 'm', 'yellow', 'orange', 'lime', 'cyan', 'purple', 'brown', 'pink', 'grey']
-
 # color graph using greedy algo (welsh-powell)
 def color(G):
     # sort nodes by degree, dec value (value,deg)
     sortednodes = sorted(G.degree, key=itemgetter(1), reverse=True)
     newnodelist = [a[0] for a in sortednodes]
 
-    # create new graph w/ sorted nodes
-    G2 = nx.Graph()
-    G2.add_nodes_from(newnodelist)
-    G2.add_edges_from(G.edges)
-
     # set init color for node w/ highest degree
-    G2.nodes[newnodelist[0]].update({'color' : 0})
+    G.nodes[newnodelist[0]].update({'color' : 0})
 
-    print(G2.nodes['C'])
-
-
-    available = [False for value in range(len(colorlist))]
-
+    # iterate over rest of nodes in dec degree order
     for node in newnodelist[1:]:
-        for adj in G2.neighbors(node):
-            if ('color' in G2[adj]) == False:
-                print("Node" + node)
-                print("is false")
+        available = [True for value in range(len(newnodelist))]     # temp array to find available color
 
-            #print('color' in G2[adj])
+        # check adj nodes for color, if they do, make color false in temp array
+        for adj in G.neighbors(node):
+            if ('color' in G.nodes[adj]) == True:
+                available[G.node[adj]['color']] = False
 
+        # assign first available color
+        value = next(i for i,v in enumerate(available) if v == True)
+        G.nodes[node].update({'color' : value})
 
-    '''i = 1
-    for node in newnodelist[1:]:
-        G2.nodes[node].update({'color' : colorlist[i]})
-        print(G2.nodes[node])
-        i += 1'''
-
-    print(nx.get_node_attributes(G2, 'color'))
-    # print(G2.nodes['C'])
-
-    return G2
+    return G
 
 
 def draw(G):
@@ -58,10 +41,11 @@ def draw(G):
     pos = nx.spring_layout(G)
 
     # fetch colors from graph and store in colors array
-    colors = []
+    colorlist = ['r', 'g', 'b', 'm', 'yellow', 'orange', 'lime', 'cyan', 'purple', 'brown', 'pink', 'grey']
+    colors =[]
     atr = nx.get_node_attributes(G, 'color')
     for nodes in G.nodes:
-        colors.append(atr[nodes])
+        colors.append(colorlist[atr[nodes]])
 
     # draw graph and us matplotlib to visualize
     nx.draw(G, pos, with_labels=True, node_color= colors)
@@ -77,6 +61,17 @@ edgelist = [('A','B'),('B','C'),('B','D'), ('C', 'D'), ('C', 'E'), ('C', 'F')]
 G.add_nodes_from(nodelist)
 G.add_edges_from(edgelist)
 
+G2 = nx.Graph()
+nodelist2 = 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+edgelist2 = [('A','B'), ('A','C'),  ('B','D'), ('B','E'), ('C','D'), ('C','H'), ('D','E'), ('D','F'), ('D','G'),
+             ('D', 'H'), ('E','H'), ('F','G'),  ('G','H'),]
+G2.add_nodes_from(nodelist2)
+G2.add_edges_from(edgelist2)
+
 coloredgraph = color(G)
-#draw(coloredgraph)
-#plt.show()
+coloredgraph2 = color(G2)
+print(nx.get_node_attributes(G, 'color'))
+draw(coloredgraph)
+plt.show()
+draw(coloredgraph2)
+plt.show()
