@@ -13,7 +13,7 @@ from operator import itemgetter
 
 colorlist = ['red', 'green', 'blue', 'magenta', 'yellow', 'orange', 'lime', 'cyan', 'purple', 'brown', 'pink', 'grey']
 
-# color graph using greedy algo (welsh-powell)
+# color graph using modified greedy algo (welsh-powell)
 def color(G):
     # sort nodes by degree, dec value (value,deg)
     sortednodes = sorted(G.degree, key=itemgetter(1), reverse=True)
@@ -28,11 +28,11 @@ def color(G):
 
         # check adj nodes for color, if they do, make color false in temp array
         for adj in G.neighbors(node):
-            if ('color' in G.nodes[adj]) == True:
+            if ('color' in G.nodes[adj]) is True:
                 available[G.node[adj]['color']] = False
 
         # assign first available color
-        value = next(index for index,value in enumerate(available) if value == True)
+        value = next(index for index,value in enumerate(available) if value is True)
         G.nodes[node].update({'color' : value})
 
 # draw graph
@@ -50,13 +50,13 @@ def draw(G):
 
 # display graph information Node, atr, color, χ(G), bipartite, planer, returns χ(G)
 def info(G, atrs):
-    print('Node\tAttribute\t"Color"')
-    print("---------------------------")
+    print('{:<14}{:12}{}'.format("Node", "Attribute", '"Color"'))
+    print("----------------------------------")
 
     for node in G.nodes:
         print('{:<14}{:12}{}'.format(node, atrs[G.node[node]['color']], G.node[node]['color']))
 
-    print("---------------------------")
+    print("----------------------------------")
     chromaticnum = max(nx.get_node_attributes(G,'color').values()) + 1
     print("χ(G): {}".format(chromaticnum))
 

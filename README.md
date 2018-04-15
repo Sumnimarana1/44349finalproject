@@ -1,7 +1,7 @@
 # 44349finalproject
 graph coloring
 
-#HAVE to install networkx, numpy, and matlibplot to run
+# MUST HAVE to networkx, numpy, and matlibplot to run
 
 color trick for testing bipartite: graph is bipartite if no two adjacent verts have the same color
 

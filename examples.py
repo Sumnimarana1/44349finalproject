@@ -20,7 +20,7 @@ edgelistg1 = [('A','B'),('B','C'),('B','D'), ('C', 'D'), ('C', 'E'), ('C', 'F')]
 G.add_nodes_from(nodelistg1)
 G.add_edges_from(edgelistg1)
 
-# Graph 2: Connected Graph
+# Graph 2: Complete Graph w/ 8 nodes
 G2 = nx.complete_graph(8)
 
 # Graph 3: Bipartite
@@ -62,11 +62,16 @@ periodlist = ['Period 1', 'Period 2', 'Period 3', 'Period 4', 'Period 5', 'Perio
 G6.add_nodes_from(nodelistg6)
 G6.add_edges_from(edgelistg6)
 
-# Graph 7: Register Allocation
-
+# use our methods to find graph coloring :)
+print("Graph 1: Simple example")
 regcolor(G)
+print("Graph 2: Complete Graph w/ 8 nodes")
 regcolor(G2)
+print("Graph 3: Bipartite")
 regcolor(G4)
+print("Graph 4: Florentine families")
 regcolor(G3)
+print("Graph 5: Assembly process w/ 6 distinct steps")
 schedule(G5,phaselist)
+print("Graph 6: Final Exam Schedule")
 schedule(G6,periodlist)
