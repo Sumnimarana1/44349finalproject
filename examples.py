@@ -10,21 +10,63 @@
 from graphcoloring import regcolor, schedule
 import networkx as nx
 
+# Graph 1: Simple example
 # init graph
 G = nx.Graph()
 
 # create list of nodes, edges and add to G
-nodelist = ['A', 'B', 'C', 'D', 'E', 'F']
-edgelist = [('A','B'),('B','C'),('B','D'), ('C', 'D'), ('C', 'E'), ('C', 'F')]
-G.add_nodes_from(nodelist)
-G.add_edges_from(edgelist)
+nodelistg1 = ['A', 'B', 'C', 'D', 'E', 'F']
+edgelistg1 = [('A','B'),('B','C'),('B','D'), ('C', 'D'), ('C', 'E'), ('C', 'F')]
+G.add_nodes_from(nodelistg1)
+G.add_edges_from(edgelistg1)
 
-G2 = nx.Graph()
-nodelist2 = 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
-edgelist2 = [('A','B'), ('A','C'),  ('B','D'), ('B','E'), ('C','D'), ('C','H'), ('D','E'), ('D','F'), ('D','G'),
-             ('E','H'), ('F','G'),  ('G','H')]
-G2.add_nodes_from(nodelist2)
-G2.add_edges_from(edgelist2)
+# Graph 2: Connected Graph
+G2 = nx.complete_graph(8)
+
+# Graph 3: Bipartite
+G3 = nx.Graph()
+nodelistg3 = ['A', 'B', 'C', 'D', 'E']
+edgelistg3 = [('A','C'), ('A', 'D'), ('A', 'E'), ('B', 'C'), ('B','D'), ('B', 'E')]
+G3.add_nodes_from(nodelistg3)
+G3.add_edges_from(edgelistg3)
+
+# Graph 4: Florentine families
+G4 = nx.florentine_families_graph()
+
+# Graph 5: Assembly process w/ 6 distinct steps
+# Each step takes 5 mins
+# No two steps of A, B, and E may be done at the same time
+# Steps B and D may not be done at the same time
+# No two of steps C, D, and F may be done at the same time
+G5 = nx.Graph()
+nodelistg5 = ['A', 'B', 'C', 'D', 'E', 'F']
+edgelistg5 = [('A', 'B'), ('A', 'E'), ('B', 'E'), ('B', 'D'), ('C', 'D'), ('C', 'F'), ('D', 'F')]
+phaselist = ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5', 'Phase 6']
+G5.add_nodes_from(nodelistg5)
+G5.add_edges_from(edgelistg5)
+
+# Graph 6: Final Exam Schedule
+# Schedule the final exams for Math 115, Math 116, Math 185, Math 195, CS 101, CS 102, CS 273, and CS 473,
+# using the fewest number of different time slots, if there are no students taking both Math 115 and CS 473,
+# both Math 116 and CS 473, both Math 195 and CS 101, both Math 195 and CS 102, both Math 115 and Math 116,
+# both Math 115 and Math 185, and both Math 185 and Math 195, but there are students in every other pair of courses.
+G6 = nx.Graph()
+nodelistg6 = ['Math 115', 'Math 116', 'Math 185', 'Math 195', 'CS 101', 'CS 102', 'CS 273', 'CS 473']
+edgelistg6 = [('Math 115', 'Math 195'), ('Math 115', 'CS 101'), ('Math 115', 'CS 102'), ('Math 115', 'CS 273'),
+              ('Math 116', 'Math 185'), ('Math 116', 'Math 195'), ('Math 116', 'CS 101'), ('Math 116', 'CS 102'),
+              ('Math 116', 'CS 273'), ('Math 185', 'CS 101'), ('Math 185', 'CS 102'), ('Math 185', 'CS 273'),
+              ('Math 185', 'CS 473'), ('Math 195', 'CS 273'), ('Math 195', 'CS 473'), ('CS 101', 'CS 102'),
+              ('CS 101', 'CS 273'), ('CS 101', 'CS 473'), ('CS 102', 'CS 273'), ('CS 102', 'CS 473'),
+              ('CS 273', 'CS 473')]
+periodlist = ['Period 1', 'Period 2', 'Period 3', 'Period 4', 'Period 5', 'Period 6', 'Period 7', 'Period 8']
+G6.add_nodes_from(nodelistg6)
+G6.add_edges_from(edgelistg6)
+
+# Graph 7: Register Allocation
 
 regcolor(G)
 regcolor(G2)
+regcolor(G4)
+regcolor(G3)
+schedule(G5,phaselist)
+schedule(G6,periodlist)

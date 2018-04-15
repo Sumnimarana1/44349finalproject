@@ -11,6 +11,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from operator import itemgetter
 
+colorlist = ['red', 'green', 'blue', 'magenta', 'yellow', 'orange', 'lime', 'cyan', 'purple', 'brown', 'pink', 'grey']
+
 # color graph using greedy algo (welsh-powell)
 def color(G):
     # sort nodes by degree, dec value (value,deg)
@@ -30,56 +32,53 @@ def color(G):
                 available[G.node[adj]['color']] = False
 
         # assign first available color
-        value = next(i for i,v in enumerate(available) if v == True)
+        value = next(index for index,value in enumerate(available) if value == True)
         G.nodes[node].update({'color' : value})
 
-
+# draw graph
 def draw(G):
     # Position nodes using Fruchterman-Reingold force-directed algorithm
     pos = nx.spring_layout(G)
 
     # fetch colors from graph, map to actual color, then store in colors array
-    colorlist = ['red', 'green', 'blue', 'magenta', 'yellow', 'orange', 'lime', 'cyan', 'purple', 'brown', 'pink', 'grey']
     colors =[]
-
     for node in G.nodes:
         colors.append(colorlist[G.node[node]['color']])
 
     # draw graph and us matplotlib to visualize
     nx.draw(G, pos, with_labels=True, node_color= colors)
 
-    return colors
-
+# display graph information Node, atr, color, χ(G), bipartite, planer, returns χ(G)
 def info(G, atrs):
     print('Node\tAttribute\t"Color"')
     print("---------------------------")
+
     for node in G.nodes:
-        print('{:8}{:12}{}'.format(node, atrs[G.node[node]['color']], G.node[node]['color']))
+        print('{:<14}{:12}{}'.format(node, atrs[G.node[node]['color']], G.node[node]['color']))
 
-# test
+    print("---------------------------")
+    chromaticnum = max(nx.get_node_attributes(G,'color').values()) + 1
+    print("χ(G): {}".format(chromaticnum))
 
-# init graph
-G = nx.Graph()
+    if chromaticnum <= 4:
+        if chromaticnum <= 2:
+            print("Graph is bipartite")
+        print("Graph is planer")
 
-# create list of nodes, edges and add to G
-nodelist = ['A', 'B', 'C', 'D', 'E', 'F']
-edgelist = [('A','B'),('B','C'),('B','D'), ('C', 'D'), ('C', 'E'), ('C', 'F')]
-G.add_nodes_from(nodelist)
-G.add_edges_from(edgelist)
+    print()
 
-G2 = nx.Graph()
-nodelist2 = 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
-edgelist2 = [('A','B'), ('A','C'),  ('B','D'), ('B','E'), ('C','D'), ('C','H'), ('D','E'), ('D','F'), ('D','G'),
-             ('D', 'H'), ('E','H'), ('F','G'),  ('G','H'),]
-G2.add_nodes_from(nodelist2)
-G2.add_edges_from(edgelist2)
+    return chromaticnum
 
-#coloredgraph = color(G)
-#coloredgraph2 = color(G2)
-color(G)
-x = draw(G)
-info(G,x)
-print(nx.get_node_attributes(G, 'color'))
-plt.show()
-#draw(coloredgraph2)
-#plt.show()
+# normal coloring
+def regcolor(G):
+    color(G)
+    draw(G)
+    info(G,colorlist)
+    plt.show()
+
+# use graph coloring to resolve scheduling conflicts
+def schedule(G,atrs):
+    color(G)
+    draw(G)
+    info(G,atrs)
+    plt.show()
