@@ -12,4 +12,4 @@ four color thm: chromatic number of a planer graph is no greater than 4
 
 six color thm: chromatic number of a connected, planer simple graph is no greater than 6
 
-this is way easier than solving chromatic polynomails
+this is way easier than solving chromatic polynomials
